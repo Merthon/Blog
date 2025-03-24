@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from .models import Post
 import markdown
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, SimpleRegisterForm
 
 def post_list(request):
     posts = Post.objects.all()
@@ -92,12 +92,12 @@ def user_login(request):
 
 def user_register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SimpleRegisterForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('login')
     else:
-        form = UserCreationForm()
+        form = SimpleRegisterForm()
     return render(request, 'blog/register.html', {'form': form})
 
 @login_required
